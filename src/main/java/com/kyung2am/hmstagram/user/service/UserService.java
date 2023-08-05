@@ -18,6 +18,7 @@ public class UserService {
 		return userRepository.countByLoginId(LoginId);
 	}
 	
+	// 회원가입
 	public User addUser(String loginId, String password, String userName, String nickName) {
 		
 		String encryPassword = EncryptUtils.md5(password);
@@ -28,6 +29,14 @@ public class UserService {
 				.userName(userName)
 				.nickName(nickName)
 				.build());
+		
+		return user;
+		
+	}
+	
+	public User login(String loginId, String password) {
+		
+		User user = userRepository.findByLoginIdAndPassword(loginId, password);
 		
 		return user;
 		

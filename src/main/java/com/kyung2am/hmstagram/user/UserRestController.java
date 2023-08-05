@@ -56,4 +56,21 @@ public class UserRestController {
 		return resultMap;
 	}
 	
+	// 로그인
+	public Map<String, String> login(
+				@RequestParam("loginId") String loginId
+				,@RequestParam("password") String password
+			) {
+		
+		Map<String, String> resultMap = new HashMap<>();
+		
+		if(userService.login(loginId, password) != null) {
+			resultMap.put("result", "success");
+		}else {
+			resultMap.put("result", "fail");
+		}
+		
+		return resultMap;
+	}
+	
 }

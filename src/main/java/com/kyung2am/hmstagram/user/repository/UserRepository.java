@@ -10,5 +10,7 @@ import com.kyung2am.hmstagram.user.domain.User;
 public interface UserRepository extends JpaRepository<User, Integer>{
 	
 	public int countByLoginId(String loginId);
+	
+	public User findByLoginIdAndPassword(String loginId, String password);
 
 }
