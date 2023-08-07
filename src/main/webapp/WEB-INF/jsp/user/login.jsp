@@ -16,12 +16,12 @@
 				<div class="text-center mb-4">
 					<h2 class="mb-0">Hm</h2>
 				</div>
-				<div>
+				<form id="loginFrom">
 					<div class="input-group">
 						<input type="text" placeholder="아이디" class="form-control" id="idInput">
 					</div>
 					<input type="password" placeholder="비밀번호" class="form-control mt-2" id="passwordInput">
-					<button class="btn btn-primary btn-block my-3" id="loginBtn">로그인</button>
+					<button type="submit" class="btn btn-primary btn-block my-3" id="loginBtn">로그인</button>
 					<div class="d-flex justify-content-center">
 						<div class="col-sm-5 mr-2"><hr class="line"></div>
 						<div class="col-auto">또는</div>
@@ -31,7 +31,7 @@
 						<div class="mr-2">계정이 없으신가요?</div><a href="/user/join-view">가입하기</a>
 					</div>
 					<div class="text-center small"><a href="#" class="text-secondary">비밀번호를 잊으셨나요?</a></div>	
-				</div>
+				</form>
 			</div>
 		</section>
 	</div>
@@ -41,9 +41,13 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	<script>
 		
-		$(documnet).ready(function() {
+		$(document).ready(function() {
 			
-			$("#loginBtn").on("click", function() {
+			//$("#loginBtn").on("click", function() {
+			$("#loginFrom").on("submit", function(e) {
+				
+				// 이벤트 고유의 기능을 취소한다.
+				e.preventDefault();
 				
 				let id = $("#idInput").val();
 				let password = $("#passwordInput").val();
@@ -65,6 +69,7 @@
 					,success:function(data){
 						if(data.result == "success"){
 							alert("로그인 성공");
+							location.href = "/post/timeline";
 						}else{
 							alert("아이디 혹은 패스워드가 다릅니다.");
 						}

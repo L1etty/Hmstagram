@@ -36,7 +36,9 @@ public class UserService {
 	
 	public User login(String loginId, String password) {
 		
-		User user = userRepository.findByLoginIdAndPassword(loginId, password);
+		String encryPassword = EncryptUtils.md5(password);
+		
+		User user = userRepository.findByLoginIdAndPassword(loginId, encryPassword);
 		
 		return user;
 		

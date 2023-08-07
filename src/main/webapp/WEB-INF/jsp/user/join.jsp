@@ -119,7 +119,7 @@
 					,data:{"loginId":id, "password":password, "userName":userName, "nickName":nickName}
 					,success:function(data){
 						if(data.result == "success"){
-							location.href = "user/login-view"
+							location.href = "user/login-view";
 						}else{
 							alert("회원가입 실패");
 						}
