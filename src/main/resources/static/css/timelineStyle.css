@@ -21,3 +21,16 @@ header > nav > ul > li:hover{
 	height: 200px;
 	background-color: red;
 }
+.commentInput{
+	border: 0 solid black;
+}
+.commentInput:focus{
+	outline: none;
+}
+.timeline-post{
+	border-bottom: 1px solid black;
+}
+
+#post-created-view{
+	display: none;
+}

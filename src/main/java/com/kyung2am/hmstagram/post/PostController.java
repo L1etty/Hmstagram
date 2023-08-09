@@ -1,4 +1,4 @@
-package com.kyung2am.hmstagram.user;
+package com.kyung2am.hmstagram.post;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

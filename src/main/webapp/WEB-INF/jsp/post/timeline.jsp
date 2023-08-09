@@ -33,17 +33,34 @@
 			</div>
 		</header>
 		<section class="contents mx-auto">
-			<div>
+			<div id="post-created-view" class="d-flex justify-content-center align-items-center">
+					<div class="bg-info" id="post-created-box">
+						<div class="d-flex justify-content-between">
+							<div class="d-flex">
+								<div>img</div>
+								<div>이름</div>
+							</div>
+							<button type="button" id="creatBtn">공유하기</button>
+						</div>
+						<div class="d-flex align-items-center">
+							<input type="file" class="d-flex" id="fileInput">
+							<div>
+								<textarea rows="5" cols="20" id="contentInput"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+			<div class="timeline-post">
 				<div class="d-flex">
-					<div>img</div>
-					<div>id</div>
+					<div class="mr-3">○</div>
+					<div>유저이름</div>
 				</div>
 				<div>
 					<div class="test-img"></div>
 				</div>
 				<div class="d-flex">
-					<div>heart</div>
-					<div>comment</div>
+					<div class="mr-3">♡</div>
+					<div>따봉</div>
 				</div>
 				<div>좋아요 2개</div>
 				<div>
@@ -51,24 +68,9 @@
 					<div>더 보기</div>
 				</div>
 				<div>
-					<div>comment_Input</div>
-					<div class="d-flex">
-						<input><div>add</div>
-					</div>
-				</div>
-			</div>
-			<div class="bg-">
-				<div class="d-flex">
-					<div>
-						<div>img</div>
-						<div>Id</div>
-					</div>
-					<div>공유하기</div>
-				</div>
-				<div class="d-flex">
-					<div>사진선택</div>
-					<div>
-						<textarea rows="5" cols="20"></textarea>
+					<div>댓글 달기...</div>
+					<div class="d-flex ">
+						<input class="commentInput"><div>게시</div>
 					</div>
 				</div>
 			</div>
@@ -81,9 +83,13 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	<script>
 		$(document).ready(function() {
-				
+			
+			$("#creatBtn").on("click", function() {
+				let id = #{userId};
+				alert(id);
+			});
+			
 		});
-	
 	</script>
 </body>
 </html>
