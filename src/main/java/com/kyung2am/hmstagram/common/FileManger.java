@@ -14,13 +14,17 @@ public class FileManger {
 	
 	public static String saveFile(int userId, MultipartFile file) {
 		
-		String directoryName = "/" + userId + "_" +System.currentTimeMillis() + "/";
+		if(file == null) {
+			
+		}
+		
+		String directoryName = "/" + userId + "_" + System.currentTimeMillis() + "/";
 		
 		String directoryPath = FILE_UPLODA_PATH + directoryName;
 		
 		File directory = new File(directoryPath);
 		
-		if(directory.mkdir()) {
+		if(!directory.mkdir()) {
 			return null;
 		}
 		
@@ -35,6 +39,7 @@ public class FileManger {
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.out.println("이미지 없음");
 			return null;
 		}
 		

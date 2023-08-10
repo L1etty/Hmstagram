@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <title>타임라인</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <link rel="stylesheet" href="/static/css/timelineStyle.css">
 </head>
 <body>
@@ -32,49 +33,61 @@
 				
 			</div>
 		</header>
-		<section class="contents mx-auto">
+ 		<section class="contents mx-auto">
 			<div id="post-created-view" class="d-flex justify-content-center align-items-center">
-					<div class="bg-info" id="post-created-box">
-						<div class="d-flex justify-content-between">
-							<div class="d-flex">
-								<div>img</div>
-								<div>이름</div>
+					<div class="border mt-5" id="post-created-box">
+						<div class="m-2">
+							<div class="d-flex justify-content-between mb-2">
+								<div class="d-flex">
+									<div>img</div>
+									<div>${userName}</div>
+								</div>
+								<a id="creatBtn" class="text-primary">공유하기</a>
 							</div>
-							<button type="button" id="creatBtn">공유하기</button>
-						</div>
-						<div class="d-flex align-items-center">
-							<input type="file" class="d-flex" id="fileInput">
-							<div>
-								<textarea rows="5" cols="20" id="contentInput"></textarea>
+							<div class="d-flex align-items-end">
+								<div class="align-items-end">
+									<i class="bi bi-card-image image-icon" id="imageIcon"></i>
+								</div>
+								<input type="file" class="d-none" id="fileInput">
+								<div>
+									<textarea rows="5" cols="20" id="contentInput" class="border-0"></textarea>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			<div class="timeline-post">
-				<div class="d-flex">
-					<div class="mr-3">○</div>
-					<div>유저이름</div>
-				</div>
-				<div>
-					<div class="test-img"></div>
-				</div>
-				<div class="d-flex">
-					<div class="mr-3">♡</div>
-					<div>따봉</div>
-				</div>
-				<div>좋아요 2개</div>
-				<div>
-					<div><b>nickname</b> 텍스트 텍스트 텍스트</div>
-					<div>더 보기</div>
-				</div>
-				<div>
-					<div>댓글 달기...</div>
-					<div class="d-flex ">
-						<input class="commentInput"><div>게시</div>
+				
+			<c:forEach var="postList" items="${postList}" >
+				<div class="timeline-post">
+					<div class="d-flex">
+						<div class="mr-3">○</div>
+						<div>${postList.getUserName()}</div>
+					</div>
+					<div>
+						<div class="test-img"></div>
+					</div>
+					<div class="d-flex p-2">
+						<i class="bi bi-heart"></i>
+						<i class="bi bi-hand-thumbs-up"></i><div>좋아요 2개</div>
+					</div>
+					
+					<div class="px-2">
+						<div><b>nickname</b> 텍스트 텍스트 텍스트</div>
+					</div>
+					<div class="comment-box small">
+						<div class="px-2">
+							<div>댓글 보기</div>
+							<div>댓글 달기...</div>
+						</div>
+						
+						<div class="d-flex justify-content-end">
+							<input class="commentInput"><div>게시</div>
+						</div>
 					</div>
 				</div>
-			</div>
+			</c:forEach>
 		</section>
+		
 		
 	</div>
 
@@ -84,9 +97,49 @@
 	<script>
 		$(document).ready(function() {
 			
+			$("#imageIcon").on("click", function() {
+				$("#fileInput").click();
+			});
+			
 			$("#creatBtn").on("click", function() {
-				let id = #{userId};
-				alert(id);
+				
+				let file = $("#fileInput")[0];
+	
+				let content = $("#contentInput").val();
+				
+				if(file.files.length == 0){
+					alert("파일을 넣어주세요.");
+					return false;
+				}
+				
+				if(content == ""){
+					alert("내용을 입력해주세요");
+					return false;
+				}
+				
+				var formData = new FormData();
+				formData.append("contentImagePath", file.files[0]);
+				formData.append("content", content);
+				
+ 				$.ajax({
+					type:"post"
+					,url:"/post/create"
+					,data:formData
+					,enctype:"multipart/form-data" // 파일 업로드 옵션
+					,processData:false // 파일 업로드 옵션
+					,contentType:false  // 파일 업로드 옵션
+					,success:function(data){
+						if(data.result = "success"){
+							alert("저장성공");
+						}else{
+							alert("저장실패");
+						}
+					}
+					,error:function(){
+						alert("저장에러");
+					}
+				});
+				
 			});
 			
 		});

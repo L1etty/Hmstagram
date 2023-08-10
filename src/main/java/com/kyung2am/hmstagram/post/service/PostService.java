@@ -1,5 +1,7 @@
 package com.kyung2am.hmstagram.post.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,13 +20,19 @@ public class PostService {
 		
 		String filePath = FileManger.saveFile(userId, contentImagePath);
 		
-		Post post = Post.builder()
+		Post post = postRepository.save(Post.builder()
 				.contentImagePath(filePath)
 				.content(content)
 				.userId(userId)
-				.build();
+				.build()
+				);
+				
 
 		return post == null;
+	}
+	
+	public List<Post> getPostList(){
+		return postRepository.findAllUserPost();
 	}
 	
 }
