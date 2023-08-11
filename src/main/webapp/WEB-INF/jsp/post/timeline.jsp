@@ -58,21 +58,21 @@
 				</div>
 				
 			<c:forEach var="postList" items="${postList}" >
-				<div class="timeline-post">
+				<div class="timeline-post my-3">
 					<div class="d-flex">
 						<div class="mr-3">○</div>
-						<div>${postList.getUserName()}</div>
+						<div>${postList.userName}</div>
 					</div>
 					<div>
-						<div class="test-img"></div>
+						<img src="${postList.contentImagePath}" class="img-fluid">
 					</div>
 					<div class="d-flex p-2">
-						<i class="bi bi-heart"></i>
+						<i class="bi bi-heart likeBtn" data-post-id="${postList.id}"></i>
 						<i class="bi bi-hand-thumbs-up"></i><div>좋아요 2개</div>
 					</div>
 					
-					<div class="px-2">
-						<div><b>nickname</b> 텍스트 텍스트 텍스트</div>
+					<div class="w-100 px-2">
+						<div><b>${postList.userName}</b> ${postList.content}</div>
 					</div>
 					<div class="comment-box small">
 						<div class="px-2">
@@ -96,6 +96,27 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	<script>
 		$(document).ready(function() {
+			
+			$(".likeBtn").on("click", function() {
+				
+				let postid = $(this).data("post-id");
+				
+				alert(like);
+				
+				 $.ajax({
+					type:"post"
+					,url:"/post/like"
+					,data:{"postId":postid}
+				 	,success:function(data){
+				 		alert(data.result);
+				 	}
+					,error:function(){
+						alert("에러");
+					}
+					
+				});
+				
+			});
 			
 			$("#imageIcon").on("click", function() {
 				$("#fileInput").click();
@@ -130,6 +151,7 @@
 					,contentType:false  // 파일 업로드 옵션
 					,success:function(data){
 						if(data.result = "success"){
+							location.href = "/post/timeline";
 							alert("저장성공");
 						}else{
 							alert("저장실패");

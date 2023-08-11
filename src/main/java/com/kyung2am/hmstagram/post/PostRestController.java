@@ -22,7 +22,7 @@ public class PostRestController {
 	
 	@Autowired
 	private PostService postService;
-
+	
 	@PostMapping("/create")
 	public Map<String, String> create(
 				@RequestParam("contentImagePath") MultipartFile contentImagePath
@@ -39,6 +39,29 @@ public class PostRestController {
 			}else {
 				resultMap.put("result", "fail");
 			}
+		
+		return resultMap;
+	}
+	
+	@PostMapping("/like")
+	public Map<String, String> like(
+			@RequestParam("postId") int postId
+			,HttpSession session
+			){
+		
+		Map<String, String> resultMap = new HashMap<>();
+		
+		int userId = (Integer)session.getAttribute("userId");
+		
+		String like = postService.likeManger(postId, userId);
+		
+		if(like.equals("add")) {
+			resultMap.put("result", "add");
+		}else if(like.equals("remove")) {
+			resultMap.put("result", "remove");
+		}else {
+			resultMap.put("result", "fail");
+		}
 		
 		return resultMap;
 	}
