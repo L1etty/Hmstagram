@@ -85,16 +85,18 @@ public class PostService {
 		if(like == 0) {
 			// 좋아요 안된 상태
 			
-			Like.builder()
+			likeRepository.save(Like.builder()
 			.postId(postId)
 			.userId(userId)
-			.build();
+			.build());
 			
 			return "add";
 		}else {
 			// 좋아요 된 상태
 			
-			likeRepository.deleteByPostId(postId);
+			Like deleteLike = likeRepository.findByPostId(postId);
+			
+			likeRepository.delete(deleteLike);
 			
 			return "remove";
 		}

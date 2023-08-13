@@ -36,6 +36,14 @@ header > nav > ul > li:hover{
 	font-size: 24px;
 }
 
+.img-box{
+	height: 200px;
+}
+
+.commentBtn{
+	font-size: 15px;
+}
+
 #post-created-view{
 	display: none;
 }

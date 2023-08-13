@@ -58,30 +58,29 @@
 				</div>
 				
 			<c:forEach var="postList" items="${postList}" >
-				<div class="timeline-post my-3">
+				<div class="timeline-post my-3 pb-3">
 					<div class="d-flex">
 						<div class="mr-3">○</div>
 						<div>${postList.userName}</div>
 					</div>
-					<div>
+					<div class="img-box">
 						<img src="${postList.contentImagePath}" class="img-fluid">
 					</div>
-					<div class="d-flex p-2">
+					<div class="d-flex py-2">
 						<i class="bi bi-heart likeBtn" data-post-id="${postList.id}"></i>
 						<i class="bi bi-hand-thumbs-up"></i><div>좋아요 2개</div>
 					</div>
 					
-					<div class="w-100 px-2">
+					<div class="w-100">
 						<div><b>${postList.userName}</b> ${postList.content}</div>
 					</div>
 					<div class="comment-box small">
-						<div class="px-2">
+						<div class="my-2">
 							<div>댓글 보기</div>
-							<div>댓글 달기...</div>
 						</div>
 						
-						<div class="d-flex justify-content-end">
-							<input class="commentInput"><div>게시</div>
+						<div class="d-flex justify-content-between">
+							<input class="commentInput col-10 p-0" placeholder="댓글 달기..."><div class="commentBtn text-primary mr-3">게시</div>
 						</div>
 					</div>
 				</div>
@@ -99,15 +98,13 @@
 			
 			$(".likeBtn").on("click", function() {
 				
-				let postid = $(this).data("post-id");
+				var postId = $(this).data("post-id");
 				
-				alert(like);
-				
-				 $.ajax({
+				$.ajax({
 					type:"post"
 					,url:"/post/like"
-					,data:{"postId":postid}
-				 	,success:function(data){
+					,data:{"postId":postId}
+					,success:function(data){
 				 		alert(data.result);
 				 	}
 					,error:function(){
