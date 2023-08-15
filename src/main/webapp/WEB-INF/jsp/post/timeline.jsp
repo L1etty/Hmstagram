@@ -69,14 +69,33 @@
 					</div>
 					<div class="d-flex py-2">
 						<c:set var="likeCount" value="0" />
-						<i class="bi-heart bi likeBtn" data-post-id="${postList.id}"></i>
-				        <c:forEach var="like" items="${likeList}">
-				            <c:if test="${like.postId eq postList.id}">
-				                <c:set var="likeCount" value="${likeCount + 1}" />
-				            </c:if>
-				        </c:forEach>
 						
-						<i class="bi bi-hand-thumbs-up"></i><div>좋아요 ${likeCount}개</div>
+						
+						
+						<c:choose>
+							<c:when test="${not empty likeList}">
+								<c:forEach var="like" items="${likeList}" varStatus="status">
+						            <c:if test="${like.postId eq postList.id}">
+						                <c:set var="likeCount" value="${likeCount + 1}" />
+						            </c:if>
+						            
+						            <c:choose>
+						                <c:when test='${like.postId eq postList.id}'>
+						                	<c:if test="${like.userId eq userId}"><i class="bi-heart-fill text-danger bi likeBtn" data-post-id="${postList.id}"></i></c:if>
+						                	<c:if test="${like.userId ne userId}"><i class="bi-heart bi likeBtn" data-post-id="${postList.id}"></i></c:if>
+						                </c:when>
+						                
+					                </c:choose>
+					                
+						        </c:forEach>
+							</c:when>
+							<c:otherwise>
+								<i class="bi-heart bi likeBtn" data-post-id="${postList.id}"></i>3
+							</c:otherwise>
+						</c:choose>
+				        
+						
+						<div class="ml-2">좋아요 ${likeCount}개</div>
 					</div>
 					
 					<div class="w-100">
@@ -179,14 +198,8 @@
 					,data:{"postId":postId}
 					,success:function(data){
 				 		if(data.result == "add"){
-			                likeBtn.removeClass("bi-heart"); // 변수 사용
-			                likeBtn.addClass("bi-heart-fill"); // 변수 사용
-			                likeBtn.addClass("text-danger");
 							location.reload();
 				 		}else if(data.result == "remove"){
-			                likeBtn.removeClass("bi-heart-fill"); // 변수 사용
-			                likeBtn.removeClass("text-danger");
-			                likeBtn.addClass("bi-heart"); // 변수 사용
 							location.reload();
 				 		}else{
 				 			alert("좋아요 실패");
