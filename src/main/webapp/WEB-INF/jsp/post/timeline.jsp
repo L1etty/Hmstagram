@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -67,8 +68,15 @@
 						<img src="${postList.contentImagePath}" class="img-fluid">
 					</div>
 					<div class="d-flex py-2">
-						<i class="bi bi-heart likeBtn" data-post-id="${postList.id}"></i>
-						<i class="bi bi-hand-thumbs-up"></i><div>좋아요 2개</div>
+						<c:set var="likeCount" value="0" />
+						<i class="bi-heart bi likeBtn" data-post-id="${postList.id}"></i>
+				        <c:forEach var="like" items="${likeList}">
+				            <c:if test="${like.postId eq postList.id}">
+				                <c:set var="likeCount" value="${likeCount + 1}" />
+				            </c:if>
+				        </c:forEach>
+						
+						<i class="bi bi-hand-thumbs-up"></i><div>좋아요 ${likeCount}개</div>
 					</div>
 					
 					<div class="w-100">
@@ -76,11 +84,28 @@
 					</div>
 					<div class="comment-box small">
 						<div class="my-2">
-							<div>댓글 보기</div>
+							<c:set var="count" value="0" />
+							<c:forEach var="comment" items="${commentList}">
+							    <c:if test="${comment.postId eq postList.id}">
+							        <c:set var="count" value="${count + 1}" />
+							    </c:if>
+							</c:forEach>
+							<div class="commentBox">
+								<c:if test="${count != 0}"><a class="commentListBtn">댓글 ${count}개 모두 보기</a></c:if>
+								<div class="commentList">
+									<c:forEach var="comment" items="${commentList}" varStatus="status">
+										<c:choose>
+											<c:when test="${comment.postId eq postList.id}">
+												<div>${comment.userName} / ${comment.commentContent}</div>
+											</c:when>
+										</c:choose>
+									</c:forEach>
+								</div>
+							</div>
 						</div>
 						
 						<div class="d-flex justify-content-between">
-							<input class="commentInput col-10 p-0" placeholder="댓글 달기..."><div class="commentBtn text-primary mr-3">게시</div>
+							<input class="commentInput col-10 p-0" placeholder="댓글 달기..."><div class="commentBtn text-primary mr-3" data-post-id="${postList.id}">게시</div>
 						</div>
 					</div>
 				</div>
@@ -96,17 +121,77 @@
 	<script>
 		$(document).ready(function() {
 			
-			$(".likeBtn").on("click", function() {
+			$(".commentListBtn").on("click", function(){
+				let commentBox = $(this).parent(".commentBox").find(".commentList");
+				
+				if(commentBox.is(':visible')){
+					commentBox.hide();
+				}else{
+					commentBox.show();
+				}
+				
+				
+			});
+			
+			$(".commentBtn").on("click", function() {
+				
+				let commentInput = $(this).parent().find(".commentInput").val();
 				
 				var postId = $(this).data("post-id");
+				
+				if(commentInput == ""){
+					alert("댓글을 입력해주세요.");
+					return false;
+				}
+				
+				$(this).parent().find(".commentInput").val("");
+				
+				$.ajax({
+					type:"post"
+					,url:"/post/comment"
+					,data:{"postId":postId, "commentContent":commentInput}
+					,success:function(data){
+						if(data.result == "success"){
+							location.reload();
+						}else{
+							alert("실패");
+						}
+					}
+					,error:function(){
+						 alert("에러");
+					}
+				});
+				
+			});
+			
+			
+			
+			$(".likeBtn").on("click", function() {
+			    var likeBtn = $(this); // 변수에 저장
+				
+				var postId = $(this).data("post-id");
+			
+				
 				
 				$.ajax({
 					type:"post"
 					,url:"/post/like"
 					,data:{"postId":postId}
 					,success:function(data){
-				 		alert(data.result);
-				 	}
+				 		if(data.result == "add"){
+			                likeBtn.removeClass("bi-heart"); // 변수 사용
+			                likeBtn.addClass("bi-heart-fill"); // 변수 사용
+			                likeBtn.addClass("text-danger");
+							location.reload();
+				 		}else if(data.result == "remove"){
+			                likeBtn.removeClass("bi-heart-fill"); // 변수 사용
+			                likeBtn.removeClass("text-danger");
+			                likeBtn.addClass("bi-heart"); // 변수 사용
+							location.reload();
+				 		}else{
+				 			alert("좋아요 실패");
+				 		}
+					}
 					,error:function(){
 						alert("에러");
 					}

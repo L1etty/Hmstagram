@@ -8,9 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kyung2am.hmstagram.common.FileManger;
+import com.kyung2am.hmstagram.post.domain.Comment;
 import com.kyung2am.hmstagram.post.domain.Like;
 import com.kyung2am.hmstagram.post.domain.Post;
+import com.kyung2am.hmstagram.post.dto.CommentDetail;
 import com.kyung2am.hmstagram.post.dto.PostDetail;
+import com.kyung2am.hmstagram.post.repository.CommentRepository;
 import com.kyung2am.hmstagram.post.repository.LikeRepository;
 import com.kyung2am.hmstagram.post.repository.PostRepository;
 import com.kyung2am.hmstagram.user.domain.User;
@@ -24,6 +27,9 @@ public class PostService {
 	
 	@Autowired
 	private LikeRepository likeRepository;
+	
+	@Autowired
+	private CommentRepository commentRepository;
 	
 	@Autowired
 	private UserService userService;
@@ -100,7 +106,47 @@ public class PostService {
 			
 			return "remove";
 		}
+	}
+	
+	public List<Like> getLikeList(){
+		return likeRepository.findAll();
+	}
+	
+	public boolean createComment(int postId, String commentContent, int userId) {
 		
+		Comment comment = commentRepository.save(Comment.builder()
+				.postId(postId)
+				.commentContent(commentContent)
+				.userId(userId)
+				.build()
+				);
+		
+		return comment == null;
+		
+	}
+	
+	public List<CommentDetail> getCommentList(){
+//		return commentRepository.findAll();
+		
+		List<Comment> commentList = commentRepository.findAll();
+		
+		List<CommentDetail> commentDetailList = new ArrayList<>();
+		
+		for (Comment comment : commentList) {
+			User user = userService.getUser(comment.getUserId());
+			
+			CommentDetail commentDetail = CommentDetail.builder()
+					.id(comment.getId())
+					.postId(comment.getPostId())
+					.commentContent(comment.getCommentContent())
+					.userId(user.getId())
+					.userName(user.getUserName())
+					.build();
+			
+			commentDetailList.add(commentDetail);
+	
+		}
+		return commentDetailList;
 		
 	}
 	

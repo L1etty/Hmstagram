@@ -67,4 +67,30 @@ public class PostRestController {
 		return resultMap;
 	}
 	
+	@PostMapping("/comment")
+	public Map<String, String> comment(
+			@RequestParam("postId") int postId
+			,@RequestParam("commentContent") String commentContent
+			,HttpSession session
+			){
+		
+		int userId = (Integer)session.getAttribute("userId");
+		
+		Map<String, String> resultMap = new HashMap<>();
+		
+		if(postService.createComment(postId, commentContent, userId)) {
+			//실패
+			resultMap.put("result", "fail");
+			
+		}else {
+			//성공
+			resultMap.put("result", "success");
+		}
+		
+		
+		return resultMap;
+		
+		
+	}
+	
 }

@@ -43,6 +43,9 @@ header > nav > ul > li:hover{
 .commentBtn{
 	font-size: 15px;
 }
+.commentList{
+	display: none;
+}
 
 #post-created-view{
 	display: none;
