@@ -2,6 +2,8 @@ package com.kyung2am.hmstagram.post;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,16 +25,13 @@ public class PostController {
 	
 	
 	@GetMapping("/timeline")
-	public String timeLine(Model model) {
+	public String timeLine(Model model, HttpSession session) {
 		
-		List<PostDetail> postList = postService.getPostList();
-		
-		List<Like> likeList = postService.getLikeList();
+		List<PostDetail> postList = postService.getPostList((Integer)session.getAttribute("userId"));
 		
 		List<CommentDetail> commentList = postService.getCommentList();
 		
 		model.addAttribute("postList", postList);
-		model.addAttribute("likeList", likeList);
 		model.addAttribute("commentList", commentList);
 		
 		return "/post/timeline";

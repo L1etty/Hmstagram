@@ -15,5 +15,9 @@ public class PostDetail {
 	private String contentImagePath;
 	private int userId;
 	private String userName;
+	private int likeCount;
+	private boolean likecheck;
+	private int commentCount;
+	
 	
 }

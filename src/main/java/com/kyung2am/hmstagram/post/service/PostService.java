@@ -12,6 +12,7 @@ import com.kyung2am.hmstagram.post.domain.Comment;
 import com.kyung2am.hmstagram.post.domain.Like;
 import com.kyung2am.hmstagram.post.domain.Post;
 import com.kyung2am.hmstagram.post.dto.CommentDetail;
+import com.kyung2am.hmstagram.post.dto.LikeDetail;
 import com.kyung2am.hmstagram.post.dto.PostDetail;
 import com.kyung2am.hmstagram.post.repository.CommentRepository;
 import com.kyung2am.hmstagram.post.repository.LikeRepository;
@@ -49,18 +50,7 @@ public class PostService {
 		return post == null;
 	}
 	
-	public List<PostDetail> getPostList(){
-//		List<Post> postList = postRepository.findAll();
-//		
-//		Map<Post, User> puList = new HashMap<>();
-//		
-//		for (Post post : postList) {
-//		
-//			puList.put(post, userRepository.findById(post.getUserId()));
-//			
-//		}
-//		
-//		return puList;
+	public List<PostDetail> getPostList(int userId){
 		
 		List<Post> postList = postRepository.findAllByOrderByIdDesc();
 		List<PostDetail> postDetails = new ArrayList<>();
@@ -75,6 +65,9 @@ public class PostService {
 									.contentImagePath(post.getContentImagePath())
 									.userId(post.getUserId())
 									.userName(user.getUserName())
+									.likeCount(getLikeCount(post.getId()))
+									.likecheck(checkLike(post.getId(), userId))
+									.commentCount(getCommentCount(post.getId()))
 									.build();
 			
 			postDetails.add(postDetail);
@@ -100,7 +93,7 @@ public class PostService {
 		}else {
 			// 좋아요 된 상태
 			
-			Like deleteLike = likeRepository.findByPostId(postId);
+			Like deleteLike = likeRepository.findByPostIdAndUserId(postId, userId);
 			
 			likeRepository.delete(deleteLike);
 			
@@ -108,8 +101,36 @@ public class PostService {
 		}
 	}
 	
-	public List<Like> getLikeList(){
-		return likeRepository.findAll();
+	public List<LikeDetail> getLikeList(int userId){
+//		return likeRepository.findAll();
+		
+		List<Like> likeList = likeRepository.findAll();
+		List<LikeDetail> likeDetailList = new ArrayList<>();
+		
+		for (Like like : likeList) {
+			LikeDetail likeDetail = LikeDetail.builder()
+					.id(like.getId())
+					.postId(like.getPostId())
+					.userId(like.getUserId())
+					.checkLike(checkLike(like.getPostId(), userId))
+					.build();
+			likeDetailList.add(likeDetail);
+		}
+		return likeDetailList;
+	}
+	
+	public boolean checkLike(int postId, int userId) {
+		
+		Like like = likeRepository.findByPostIdAndUserId(postId, userId);
+		
+		if(like != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	public int getLikeCount(int postId) {
+		return likeRepository.countByPostId(postId);
 	}
 	
 	public boolean createComment(int postId, String commentContent, int userId) {
@@ -123,6 +144,10 @@ public class PostService {
 		
 		return comment == null;
 		
+	}
+	
+	public int getCommentCount(int postId) {
+		return commentRepository.countByPostId(postId);
 	}
 	
 	public List<CommentDetail> getCommentList(){

@@ -10,4 +10,8 @@ public interface LikeRepository extends JpaRepository<Like, Integer>{
 
 	public Like findByPostId(int postId);
 
+	public int countByPostId(int postId);
+
+	public Like findByPostIdAndUserId(int postId, int userId);
+
 }
