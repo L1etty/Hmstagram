@@ -60,9 +60,16 @@
 				
 			<c:forEach var="postList" items="${postList}" >
 				<div class="timeline-post my-3 pb-3">
-					<div class="d-flex">
-						<div class="mr-3">○</div>
-						<div>${postList.userName}</div>
+					<div class="d-flex justify-content-between mb-1">
+						<div class="d-flex">
+							<div class="mr-3">○</div>
+							<div>${postList.userName}</div>
+						</div>
+						<c:if test="${postList.userId eq userId}">
+							<div class="postDeleteBtn text-danger mr-3" data-post-id="${postList.id}">
+								삭제
+							</div>
+						</c:if>
 					</div>
 					<div class="img-box">
 						<img src="${postList.contentImagePath}" class="img-fluid">
@@ -119,6 +126,15 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	<script>
 		$(document).ready(function() {
+			
+			$(".postDeleteBtn").on("click", function(){
+				let postId = $(this).data("post-id");
+				
+				alert(postId);
+				
+				
+				
+			});
 			
 			$(".commentListBtn").on("click", function(){
 				let commentBox = $(this).parent(".commentBox").find(".commentList");

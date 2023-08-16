@@ -93,4 +93,13 @@ public class PostRestController {
 		
 	}
 	
+	public Map<String, String> delete(
+			@RequestParam("postId") int postId
+			){
+		Map<String, String> resultMap = new HashMap<>();
+		
+		
+		return resultMap;
+	}
+	
 }
