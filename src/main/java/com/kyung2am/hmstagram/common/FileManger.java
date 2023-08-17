@@ -17,9 +17,6 @@ public class FileManger {
 	private static Logger logger = LoggerFactory.getLogger(FileManger.class);
 	
 	public static String saveFile(int userId, MultipartFile file) {
-		
-		
-		
 		if(file == null) {
 			logger.error("saveFile :: 파일이 없음");
 			return null;
@@ -58,5 +55,40 @@ public class FileManger {
 		
 	}
 
+	public static boolean removeFile(String FilePath) {
+		
+		//null 일수가 없긴한데 일단 체크는 함.
+		if(FilePath == null) {
+			return false;
+		}
+		
+		String fullFillPath = FILE_UPLODA_PATH + FilePath.replace("/images", "");
+		
+		Path path = Paths.get(fullFillPath);
+		
+		if(Files.exists(path)){
+			try {
+				Files.delete(path);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+				return false;
+			}
+		}
+		
+		path = path.getParent();
+		
+		if(Files.exists(path)) {
+			try {
+				Files.delete(path);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return true;
+	}
 	
 }

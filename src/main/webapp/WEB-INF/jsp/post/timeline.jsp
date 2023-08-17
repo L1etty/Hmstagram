@@ -12,12 +12,26 @@
 <link rel="stylesheet" href="/static/css/timelineStyle.css">
 </head>
 <body>
-	
+
+	<!-- Modal -->
+		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog">
+		  <div class="modal-dialog modal-dialog-centered" role="document">
+		    <div class="modal-content">
+		      <div class="modal-body text-center text-danger" id="deleteConfirmBtn">
+		        삭제 하기
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		
 	<div id="wrap" class="container-fluid">
+
+		
 		<header class="position-fixed h-100">
 			<div class="my-4">
 				<h2>Hm</h2>
 			</div>
+			
 			<nav>
 				<ul class="nav flex-column mr-4">
 					<li class="nav-item mt-2"><a class="nav-link text-dark" href="#">홈</a></li>
@@ -66,13 +80,13 @@
 							<div>${postList.userName}</div>
 						</div>
 						<c:if test="${postList.userId eq userId}">
-							<div class="postDeleteBtn text-danger mr-3" data-post-id="${postList.id}">
+							<div class="postDeleteBtn text-danger mr-3" data-post-id="${postList.id}"  data-toggle="modal" data-target="#exampleModalCenter">
 								삭제
 							</div>
 						</c:if>
 					</div>
 					<div class="img-box">
-						<img src="${postList.contentImagePath}" class="img-fluid">
+						<img src="${postList.contentImagePath}" class="img-fluid h-100 w-100">
 					</div>
 					<div class="d-flex py-2">
 						<c:set var="likeCount" value="0" />
@@ -83,7 +97,7 @@
 						
 						
 						<c:choose>
-							<c:when test="${postList.likecheck eq true}"><i class="bi-heart-fill text-danger bi likeBtn" data-post-id="${postList.id}"></i></c:when>
+							<c:when test="${postList.likecheck eq true}"><i class="bi-heart-fill text-danger bi likeBtn" data-post-id="@${postList.id}"></i></c:when>
 							<c:otherwise><i class="bi-heart bi likeBtn" data-post-id="${postList.id}"></i></c:otherwise>
 						</c:choose>
 				        
@@ -116,9 +130,11 @@
 					</div>
 				</div>
 			</c:forEach>
+			
 		</section>
 		
-		
+		<!-- Button trigger modal -->
+
 	</div>
 
 	<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
@@ -127,14 +143,39 @@
 	<script>
 		$(document).ready(function() {
 			
-			$(".postDeleteBtn").on("click", function(){
-				let postId = $(this).data("post-id");
+			var test;
+			$('#exampleModalCenter').on('show.bs.modal', function (event) {
+				let button = $(event.relatedTarget);
+				let buttonData = button.data("post-id");
 				
-				alert(postId);
-				
-				
-				
+				let modal = $(this);
+				test = modal.find('.modal-body').data("post-id", buttonData);
 			});
+			
+			$("#deleteConfirmBtn").on("click", function() {
+				alert(test.data("post-id"));
+				
+				
+				/* $.ajax({
+				  type:"delete"
+				  ,url:"/post/delete"
+				  ,data:{"postId":postId}
+			  	  ,success:function(data){
+			  		  if(data.result == "success"){
+			  			  
+			  		  }else{
+			  			  alert("삭제 실패");
+			  		  }
+			  	  }
+			  	  ,error:function(){
+			  		  alert("삭제 에러");
+			  	  }
+			  	
+			  }); */
+			  
+			  
+			});
+			
 			
 			$(".commentListBtn").on("click", function(){
 				let commentBox = $(this).parent(".commentBox").find(".commentList");

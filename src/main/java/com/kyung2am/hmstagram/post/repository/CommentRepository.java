@@ -8,5 +8,7 @@ public interface CommentRepository extends JpaRepository<Comment, Integer>{
 
 	public int countByPostId(int postId);
 
+	public Comment findByPostId(int postId);
+
 
 }

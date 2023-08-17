@@ -2,6 +2,7 @@ package com.kyung2am.hmstagram.post.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -175,4 +176,21 @@ public class PostService {
 		
 	}
 	
+	public boolean removePost(int postId, int userId) {
+		
+		Post post = postRepository.findById(postId).get();
+		
+		
+		if(post.getUserId() == userId) {
+			postRepository.delete(post);
+			likeRepository.delete(likeRepository.findByPostId(postId));
+			commentRepository.delete(commentRepository.findByPostId(postId));
+			FileManger.removeFile(post.getContentImagePath());
+			
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
 }

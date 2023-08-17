@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,11 +94,20 @@ public class PostRestController {
 		
 	}
 	
+	@DeleteMapping("/delete")
 	public Map<String, String> delete(
 			@RequestParam("postId") int postId
+			,HttpSession session
 			){
 		Map<String, String> resultMap = new HashMap<>();
 		
+		int userId = (Integer)session.getAttribute("userId");
+		
+		if(postService.removePost(postId, userId)) {
+			resultMap.put("result", "success");
+		}else {
+			resultMap.put("result", "fail");
+		}
 		
 		return resultMap;
 	}
